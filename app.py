@@ -23,7 +23,13 @@ app.config.update(load_config())
 
 @app.route('/')
 def index():
-    days = utils.last_n_days(14)
+    n = request.args.get('n')
+    try:
+        n = int(n)
+    except TypeError:
+        n = 7
+
+    days = utils.last_n_days(n)
     db = app.config['DATABASE']
     completed_dates = list(db.get_all_dates())
     return render_template('diary_index.html', days=days, completed_dates=completed_dates)
