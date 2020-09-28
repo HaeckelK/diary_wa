@@ -7,17 +7,24 @@ import requests
 from diarydatabase import DiaryDatabase
 import utils
 
+
+def load_config():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    filename = config['DATABASE']['path']
+    config = {'DBFILENAME': filename,
+              'DATABASE':  DiaryDatabase(filename)}
+    return config
+
+
 app = Flask(__name__)
-#app.config['DBFILENAME']
+app.config.update(load_config())
+
 
 @app.route('/')
 def index():
     days = utils.last_n_days(14)
-    # TODO move this to app['config']
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    filename = config['DATABASE']['path']
-    db = DiaryDatabase(filename)
+    db = app.config['DATABASE']
     completed_dates = list(db.get_all_dates())
     return render_template('diary_index.html', days=days, completed_dates=completed_dates)
 
@@ -37,14 +44,14 @@ def add_diary_entry():
     diary_text = data['diary_text']
     diary_text = diary_text.replace('\n', '').replace('\r','')
     data['diary_text'] = diary_text
-    # TODO move this to app['config']
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    filename = config['DATABASE']['path']
-    db = DiaryDatabase(filename)
+
+    db = app.config['DATABASE']
     for section in diary_text.split('$'):
         field = section.split(';')[0].strip().replace(' ', '')
         text = ';'.join(section.split(';')[1:])
         if field:
             db.add_raw_diary_entry(field, text, date, processed=0)
     return redirect(url_for('index'))
+
+
+
