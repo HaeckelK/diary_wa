@@ -5,17 +5,28 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify
 import requests
 
 from diarydatabase import DiaryDatabase
-
+import utils
 
 app = Flask(__name__)
-
+#app.config['DBFILENAME']
 
 @app.route('/')
 def index():
+    days = utils.last_n_days(14)
+    # TODO move this to app['config']
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    filename = config['DATABASE']['path']
+    db = DiaryDatabase(filename)
+    completed_dates = list(db.get_all_dates())
+    return render_template('diary_index.html', days=days, completed_dates=completed_dates)
+
+
+@app.route('/forms/diary_entry/<date>')
+def form_diary_entry(date):
     items = ('$breakfast', '$lunch', '$dinner', '$exercise', '$film', '$tv', '$game', '$journal')
     default_text = ';\n'.join(items) + ';\n'
-    date = '20200927'
-    return render_template('diary_index.html', default=default_text, date=date)
+    return render_template('form_diary_entry.html', default=default_text, date=date)
 
 
 @app.route('/api/add_diary_entry')
@@ -36,4 +47,4 @@ def add_diary_entry():
         text = ';'.join(section.split(';')[1:])
         if field:
             db.add_raw_diary_entry(field, text, date, processed=0)
-    return jsonify(data)
+    return redirect(url_for('index'))

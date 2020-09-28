@@ -2,12 +2,12 @@
 {% block title %}diary index{% endblock %}
 
 {% block content %}
-<h1>Diary: {{date}}</h1>
-<form action="/api/add_diary_entry" method="get">
-  <input type="hidden" id="date" name="date" value="{{date}}">
-  <div class="form-group">
-    <textarea class="form-control" name="diary_text" cols="25" rows="15">{{default}}</textarea>
-    </div>
-    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-</form>
+<h1>Diary: </h1>
+<div class="container">
+  <ul class="list-group">
+    {% for day in days %}
+      <li class="list-group-item {% if day not in completed_dates %}list-group-item-warning{% endif %}"><a href='/forms/diary_entry/{{day}}'>{{day}}</a></li>
+    {% endfor%}
+  </ul>
+</div>
 {% endblock %}

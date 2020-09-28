@@ -22,6 +22,8 @@ class DiaryDatabase(Database):
                                 VALUES(?,?,?,?,?)''', params)
         return new_id
 
-    #def get_word_all(self):
-     #   cursor = self.query('''SELECT * FROM word''')
-      #  return Results(cursor).fetchall_dict_factory()
+    def get_all_dates(self):
+        cursor = self.query('''SELECT date FROM rawinput''')
+        result = cursor.fetchall()
+        dates = set([str(x[0]) for x in result])
+        return dates
