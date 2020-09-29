@@ -3,11 +3,12 @@
 
 {% block content %}
 <h1>Diary: {{date}}</h1>
-<form action="/api/add_diary_entry" method="get">
-  <input type="hidden" id="date" name="date" value="{{date}}">
+<form action="/api/add_rawdiary_entry/" method="get">
+  <input type="hidden" id="id" name="id" value="{{date}}">
   <div class="form-group">
-    <textarea class="form-control" name="diary_text" cols="25" rows="15">{{default}}</textarea>
+    <textarea class="form-control" name="rawtext" cols="25" rows="15">{{text}}</textarea>
     </div>
-    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+    <button type="submit" class="btn btn-primary btn-sm" name="is_draft" value=0>Submit</button>
+    <button type="submit" class="btn btn-primary btn-sm" name="is_draft" value=1>Save Draft</button>
 </form>
 {% endblock %}

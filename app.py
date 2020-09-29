@@ -37,12 +37,17 @@ def index():
 
 @app.route('/forms/diary_entry/<date>')
 def form_diary_entry(date):
-    items = ('$breakfast', '$lunch', '$dinner', '$exercise', '$film', '$tv', '$game', '$journal')
-    default_text = ';\n'.join(items) + ';\n'
-    return render_template('form_diary_entry.html', default=default_text, date=date)
+    db = app.config['DATABASE']
+    row = db.get_rawdiary_row(date)
+    try:
+        diary_text = row[0]['rawtext']
+    except (KeyError, IndexError):
+        items = ('$breakfast', '$lunch', '$dinner', '$exercise', '$film', '$tv', '$game', '$journal')
+        diary_text = ';\n'.join(items) + ';\n' 
+    return render_template('form_diary_entry.html', text=diary_text, date=date)
 
 
-@app.route('/api/add_diary_entry')
+@app.route('/api/add_diary_entry/')
 def add_diary_entry():
     data = dict(request.args)
     # TODO error handling
@@ -60,4 +65,12 @@ def add_diary_entry():
     return redirect(url_for('index'))
 
 
-
+@app.route('/api/add_rawdiary_entry/')
+def add_rawdiary_entry():
+    # TODO error handling
+    id = int(request.args['id'])
+    rawtext = request.args['rawtext']
+    is_draft = request.args['is_draft']
+    db = app.config['DATABASE']
+    db.upsert_rawdiary(id, rawtext, is_draft, is_extracted=0)
+    return redirect(url_for('index'))
