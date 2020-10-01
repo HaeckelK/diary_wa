@@ -51,3 +51,11 @@ class DiaryDatabase(Database):
         result = cursor.fetchall()
         dates = set([str(x[0]) for x in result])
         return dates
+
+    def get_rawdiary_status(self, id: int):
+        cursor = self.query_with_params('''select is_draft
+                                           from rawdiary
+                                           where id = ?''', (id, ))
+        result = cursor.fetchone()
+        status = int(result[0])
+        return status
