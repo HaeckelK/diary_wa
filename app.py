@@ -1,7 +1,7 @@
 from typing import Dict
 import configparser
 
-from flask import Flask, render_template, redirect, url_for, request, jsonify
+from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
 import requests
 
 from diarydatabase import DiaryDatabase
@@ -13,7 +13,8 @@ def load_config():
     config.read('config.ini')
     filename = config['DATABASE']['path']
     config = {'DBFILENAME': filename,
-              'DATABASE':  DiaryDatabase(filename)}
+              'DATABASE':  DiaryDatabase(filename),
+              'SECRET_KEY': 'ndgnfdksmdfpa'}
     return config
 
 
@@ -73,4 +74,9 @@ def add_rawdiary_entry():
     is_draft = request.args['is_draft']
     db = app.config['DATABASE']
     db.upsert_rawdiary(id, rawtext, is_draft, is_extracted=0)
+    if is_draft == 1:
+        message = 'Diary entry saved as draft'
+    else:
+        message = 'Diary entry saved.'
+    flash(message)
     return redirect(url_for('index'))
