@@ -11,7 +11,6 @@ def empty_database():
     return db
 
 
-# TODO shouldn't pack this many tests into one place
 def test_rawdiary(tmpdir):
     filename = os.path.join(tmpdir, 'test.db')
     db = DiaryDatabase(filename)
@@ -37,3 +36,14 @@ def test_rawdiary(tmpdir):
 
     db.delete_rawdiary(20201003)
     assert db.get_all_rawdiary() == [{'id': 20201002, 'is_draft': 1, 'is_extracted': 0, 'rawtext': 'def'}]
+
+
+def test_diary(tmpdir):
+    filename = os.path.join(tmpdir, 'test.db')
+    db = DiaryDatabase(filename)
+    db.initial_setup()
+
+    db.insert_diary(20201003, 'journal', 'abc', 'abc', 0)
+    assert Results(db.query('''SELECT * FROM diary''')).fetchall_dict_factory() == [{'id': 1, 'diary_date': 20201003, 'category': 'journal', 'original': 'abc', 'clean': 'abc', 'is_clean': 0}]
+
+    

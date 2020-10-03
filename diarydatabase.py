@@ -10,11 +10,23 @@ class DiaryDatabase(Database):
                 (id INTEGER PRIMARY KEY,
                 rawtext TEXT,
                 is_draft INT,
-                is_extracted INT);'''
+                is_extracted INT);
+                CREATE TABLE IF NOT EXISTS diary
+                (id INTEGER PRIMARY KEY,
+                diary_date INT,
+                category TEXT,
+                original TEXT,
+                clean TEXT,
+                is_clean INT);'''
 
     def insert_rawdiary(self, id: int, rawtext: str, is_draft: int, is_extracted: int):
         params = (id, rawtext, is_draft, is_extracted)
         new_id = self.insert('''INSERT INTO rawdiary(id, rawtext, is_draft, is_extracted) VALUES(?,?,?,?)''', params)
+        return new_id
+
+    def insert_diary(self, diary_date: int, category: str, original: str, clean: str, is_clean: int):
+        params = (diary_date, category, original, clean, is_clean)
+        new_id = self.insert('''INSERT INTO diary(diary_date, category, original, clean, is_clean) VALUES(?,?,?,?,?)''', params)
         return new_id
 
     def update_rawdiary(self, id: int, rawtext: str, is_draft: int, is_extracted: int):
