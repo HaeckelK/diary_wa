@@ -68,6 +68,8 @@ def add_diary_entry():
 
 @app.route('/api/add_rawdiary_entry/')
 def add_rawdiary_entry():
+    # TODO this should be /api/rawdiary_entry/<id> 
+    # and take put, get requests
     # TODO error handling
     id = int(request.args['id'])
     rawtext = request.args['rawtext']
