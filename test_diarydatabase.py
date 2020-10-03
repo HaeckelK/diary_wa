@@ -31,3 +31,6 @@ def test_rawdiary(tmpdir):
 
     assert db.get_all_rawdiary() == [{'id': 20201002, 'is_draft': 1, 'is_extracted': 0, 'rawtext': 'def'},
                                      {'id': 20201003, 'is_draft': 0, 'is_extracted': 1, 'rawtext': 'abc'}]
+
+    db.delete_rawdiary(20201003)
+    assert db.get_all_rawdiary() == [{'id': 20201002, 'is_draft': 1, 'is_extracted': 0, 'rawtext': 'def'}]

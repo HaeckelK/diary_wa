@@ -56,3 +56,9 @@ class DiaryDatabase(Database):
         cursor = self.query('''select *
                                from rawdiary''')
         return Results(cursor).fetchall_dict_factory()
+
+    def delete_rawdiary(self, id):
+        cursor = self.query_with_params('''delete
+                                        from rawdiary
+                                        where id = ?;''', (id,))
+        return
