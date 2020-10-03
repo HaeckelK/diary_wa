@@ -49,5 +49,5 @@ class DiaryDatabase(Database):
     def get_all_dates(self):
         cursor = self.query('''SELECT id FROM rawdiary''')
         result = cursor.fetchall()
-        dates = set([str(x[0]) for x in result])
+        dates = list([str(x[0]) for x in result])
         return dates
