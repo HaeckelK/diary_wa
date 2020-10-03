@@ -48,24 +48,6 @@ def form_diary_entry(date):
     return render_template('form_diary_entry.html', text=diary_text, date=date)
 
 
-@app.route('/api/add_diary_entry/')
-def add_diary_entry():
-    data = dict(request.args)
-    # TODO error handling
-    date = data['date']
-    diary_text = data['diary_text']
-    diary_text = diary_text.replace('\n', '').replace('\r','')
-    data['diary_text'] = diary_text
-
-    db = app.config['DATABASE']
-    for section in diary_text.split('$'):
-        field = section.split(';')[0].strip().replace(' ', '')
-        text = ';'.join(section.split(';')[1:])
-        if field:
-            db.add_raw_diary_entry(field, text, date, processed=0)
-    return redirect(url_for('index'))
-
-
 @app.route('/api/rawdiary/', methods=['GET'])
 def api_rawdiary():
     db = app.config['DATABASE']
@@ -77,21 +59,23 @@ def get_rawdiary(rawdiary_id):
     db = app.config['DATABASE']
     return jsonify(db.get_rawdiary_row(rawdiary_id))
 
-# TODO not finished
-@app.route('/api/rawdiary/', methods=['POST'])
+
+@app.route('/api/rawdiary/', methods=['POST', 'PUT'])
 def create_rawdiary():
     # TODO error handling
-    id = int(request.args['id'])
-    rawtext = request.args['rawtext']
-    is_draft = request.args['is_draft']
+    id = int(request.form['id'])
+    rawtext = request.form['rawtext']
+    is_draft = request.form['is_draft']
     db = app.config['DATABASE']
     db.upsert_rawdiary(id, rawtext, is_draft, is_extracted=0)
-    if is_draft == 1:
+    if is_draft == '1':
         message = 'Diary entry saved as draft'
+        flash(message)
+        return redirect(request.headers.get("Referer"))
     else:
         message = 'Diary entry saved.'
-    flash(message)
-    return redirect(url_for('index'))
+        flash(message)
+        return redirect(url_for('index'))
 
 
 @app.route('/api/rawdiary/<int:rawdiary_id>', methods=['DELETE'])
@@ -102,12 +86,6 @@ def delete_rawdiary(rawdiary_id):
     db.delete_rawdiary(id)
     flash(f'Deleted rawdiary id: {rawdiary_id}')
     return redirect(url_for('index'))
-
-
-@app.route('/api/all_rawdiary/')
-def all_rawdiary():
-    db = app.config['DATABASE']
-    return jsonify(db.get_all_rawdiary())
 
 
 @app.route('/api/')
