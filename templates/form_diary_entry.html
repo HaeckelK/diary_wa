@@ -2,7 +2,7 @@
 {% block title %}diary index{% endblock %}
 
 {% block content %}
-<h1>Diary: {{date}}</h1>
+<h1><a href="{{ url_for('index') }}">Diary:</a> {{date}}</h1>
 <form action="/api/add_rawdiary_entry/" method="get">
   <input type="hidden" id="id" name="id" value="{{date}}">
   <div class="form-group">
