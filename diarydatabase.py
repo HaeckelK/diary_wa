@@ -49,8 +49,20 @@ class DiaryDatabase(Database):
     def get_all_dates(self):
         cursor = self.query('''SELECT id FROM rawdiary''')
         result = cursor.fetchall()
-        dates = set([str(x[0]) for x in result])
+        dates = list([str(x[0]) for x in result])
         return dates
+
+
+    def get_all_rawdiary(self):
+        cursor = self.query('''select *
+                               from rawdiary''')
+        return Results(cursor).fetchall_dict_factory()
+
+    def delete_rawdiary(self, id):
+        cursor = self.query_with_params('''delete
+                                        from rawdiary
+                                        where id = ?;''', (id,))
+        return
 
     def get_rawdiary_status(self, id: int):
         cursor = self.query_with_params('''select is_draft
