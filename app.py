@@ -80,3 +80,8 @@ def add_rawdiary_entry():
         message = 'Diary entry saved.'
     flash(message)
     return redirect(url_for('index'))
+
+
+@app.route('/api/')
+def api():
+    return render_template('api_index.html')
