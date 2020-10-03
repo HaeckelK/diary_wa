@@ -66,10 +66,20 @@ def add_diary_entry():
     return redirect(url_for('index'))
 
 
-@app.route('/api/add_rawdiary_entry/')
-def add_rawdiary_entry():
-    # TODO this should be /api/rawdiary_entry/<id> 
-    # and take put, get requests
+@app.route('/api/rawdiary/', methods=['GET'])
+def api_rawdiary():
+    db = app.config['DATABASE']
+    return jsonify(db.get_all_rawdiary())
+
+
+@app.route('/api/rawdiary/<int:rawdiary_id>', methods=['GET'])
+def get_rawdiary(rawdiary_id):
+    db = app.config['DATABASE']
+    return jsonify(db.get_rawdiary_row(rawdiary_id))
+
+# TODO not finished
+@app.route('/api/rawdiary/', methods=['POST'])
+def create_rawdiary():
     # TODO error handling
     id = int(request.args['id'])
     rawtext = request.args['rawtext']
@@ -84,16 +94,14 @@ def add_rawdiary_entry():
     return redirect(url_for('index'))
 
 
-@app.route('/api/rawdiary/', methods=['GET'])
-def api_rawdiary():
+@app.route('/api/rawdiary/<int:rawdiary_id>', methods=['DELETE'])
+def delete_rawdiary(rawdiary_id):
+    # TODO any knock on effects?
+    id = int(rawdiary_id)
     db = app.config['DATABASE']
-    return jsonify(db.get_all_rawdiary())
-
-
-@app.route('/api/rawdiary/<int:rawdiary_id>', methods=['GET'])
-def get_rawdiary(rawdiary_id):
-    db = app.config['DATABASE']
-    return jsonify(db.get_rawdiary_row(rawdiary_id))
+    db.delete_rawdiary(id)
+    flash(f'Deleted rawdiary id: {rawdiary_id}')
+    return redirect(url_for('index'))
 
 
 @app.route('/api/all_rawdiary/')
