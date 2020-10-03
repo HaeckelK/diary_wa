@@ -82,6 +82,12 @@ def add_rawdiary_entry():
     return redirect(url_for('index'))
 
 
+@app.route('/api/all_rawdiary/')
+def all_rawdiary():
+    db = app.config['DATABASE']
+    return jsonify(db.get_all_rawdiary())
+
+
 @app.route('/api/')
 def api():
     return render_template('api_index.html')
