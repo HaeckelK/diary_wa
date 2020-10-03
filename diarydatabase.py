@@ -52,6 +52,7 @@ class DiaryDatabase(Database):
         dates = list([str(x[0]) for x in result])
         return dates
 
+
     def get_all_rawdiary(self):
         cursor = self.query('''select *
                                from rawdiary''')
@@ -62,3 +63,11 @@ class DiaryDatabase(Database):
                                         from rawdiary
                                         where id = ?;''', (id,))
         return
+
+    def get_rawdiary_status(self, id: int):
+        cursor = self.query_with_params('''select is_draft
+                                           from rawdiary
+                                           where id = ?''', (id, ))
+        result = cursor.fetchone()
+        status = int(result[0])
+        return status

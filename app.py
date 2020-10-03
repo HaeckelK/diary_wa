@@ -33,7 +33,20 @@ def index():
     days = utils.last_n_days(n)
     db = app.config['DATABASE']
     completed_dates = list(db.get_all_dates())
-    return render_template('diary_index.html', days=days, completed_dates=completed_dates)
+
+    dates = []
+    for day in days:
+        if day not in completed_dates:
+            status = 'not_started'
+        else:
+            draft = db.get_rawdiary_status(day)
+            if draft == 1:
+                status = 'draft'
+            else:
+                status = 'completed'
+        dates.append((day, status))
+
+    return render_template('diary_index.html', dates=dates)
 
 
 @app.route('/forms/diary_entry/<date>')

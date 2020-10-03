@@ -5,8 +5,15 @@
 <h1>Diary: </h1>
 <div class="container">
   <ul class="list-group">
-    {% for day in days %}
-      <li class="list-group-item {% if day not in completed_dates %}list-group-item-warning{% endif %}"><a href='/forms/diary_entry/{{day}}'>{{day}}</a></li>
+    {% for day, status in dates %}
+      {% if status == 'draft' %}
+        {% set highlight = 'list-group-item-warning' %}
+      {% elif status == 'completed' %}
+        {% set highlight = 'list-group-item-info' %}
+      {% else %}
+        {% set highlight = 'list-group-item-light' %}
+      {% endif %}
+      <li class="list-group-item {{highlight}}"><a href='/forms/diary_entry/{{day}}'>{{day}}</a></li>
     {% endfor%}
   </ul>
 </div>
