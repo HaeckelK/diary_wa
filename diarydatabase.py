@@ -74,5 +74,5 @@ class DiaryDatabase(Database):
     def get_unextracted_rawdiary(self):
         cursor = self.query('''SELECT id FROM rawdiary where is_extracted = 0''')
         result = cursor.fetchall()
-        ids = set([str(x[0]) for x in result])
+        ids = list([str(x[0]) for x in result])
         return ids

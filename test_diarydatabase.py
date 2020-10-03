@@ -20,6 +20,7 @@ def test_rawdiary(tmpdir):
     db.upsert_rawdiary('20201003', 'abc', 1, 0)
     upsert_result = Results(db.query('''SELECT * FROM rawdiary''')).fetchall_dict_factory()
     assert upsert_result == db.get_rawdiary_row('20201003')
+    assert db.get_rawdiary_status(20201003) == 1
 
     db.upsert_rawdiary('20201003', 'abc', 0, 1)
     upsert_result = Results(db.query('''SELECT * FROM rawdiary''')).fetchall_dict_factory()
@@ -31,6 +32,8 @@ def test_rawdiary(tmpdir):
 
     assert db.get_all_rawdiary() == [{'id': 20201002, 'is_draft': 1, 'is_extracted': 0, 'rawtext': 'def'},
                                      {'id': 20201003, 'is_draft': 0, 'is_extracted': 1, 'rawtext': 'abc'}]
+
+    assert db.get_unextracted_rawdiary() == ['20201002']
 
     db.delete_rawdiary(20201003)
     assert db.get_all_rawdiary() == [{'id': 20201002, 'is_draft': 1, 'is_extracted': 0, 'rawtext': 'def'}]
