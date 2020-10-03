@@ -52,7 +52,6 @@ class DiaryDatabase(Database):
         dates = list([str(x[0]) for x in result])
         return dates
 
-
     def get_all_rawdiary(self):
         cursor = self.query('''select *
                                from rawdiary''')
@@ -71,3 +70,9 @@ class DiaryDatabase(Database):
         result = cursor.fetchone()
         status = int(result[0])
         return status
+
+    def get_unextracted_rawdiary(self):
+        cursor = self.query('''SELECT id FROM rawdiary where is_extracted = 0''')
+        result = cursor.fetchall()
+        ids = set([str(x[0]) for x in result])
+        return ids
