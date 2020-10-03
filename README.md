@@ -44,6 +44,6 @@ bump2version major
 From root
 ```bash
 mypy .
-pytest
+coverage run --source . -m pytest && coverage html
 flake8 --max-line-length 120
 ```
