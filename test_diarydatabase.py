@@ -28,3 +28,6 @@ def test_rawdiary(tmpdir):
     db.upsert_rawdiary('20201002', 'def', 1, 0)
     dates_result = db.get_all_dates()
     assert dates_result == ['20201002', '20201003']
+
+    assert db.get_all_rawdiary() == [{'id': 20201002, 'is_draft': 1, 'is_extracted': 0, 'rawtext': 'def'},
+                                     {'id': 20201003, 'is_draft': 0, 'is_extracted': 1, 'rawtext': 'abc'}]

@@ -51,3 +51,8 @@ class DiaryDatabase(Database):
         result = cursor.fetchall()
         dates = list([str(x[0]) for x in result])
         return dates
+
+    def get_all_rawdiary(self):
+        cursor = self.query('''select *
+                               from rawdiary''')
+        return Results(cursor).fetchall_dict_factory()
