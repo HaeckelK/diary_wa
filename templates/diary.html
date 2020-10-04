@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-{% block title %}{{category}} summary{% endblock %}
+{% block title %}diary {{diary_date}}{% endblock %}
 
 {% block content %}
-<h1><a href='/categories/'>{{category}}:</a></h1>
+<h1><a href="{{ url_for('index') }}">{{diary_date}}:</a></h1>
 <div class="container">
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Date</th>
-        <th scope="col">{{category}}</th>
+        <th scope="col">Category</th>
+        <th scope="col">Entry</th>
       </tr>
     </thead>
     <tbody>
       {% for row in data%}
       <tr>
-        <th scope="row"><a href="/diary/{{row['diary_date']}}">{{row['diary_date']}}</a></th>
+        <th scope="row"><a href="/category/{{row['category']}}">{{row['category']}}</a></th>
         <td>{{row['clean']}}</td>
       </tr>
       {% endfor %}

@@ -116,3 +116,10 @@ class DiaryDatabase(Database):
                                            order by diary_date DESC''',
                                            (category, ))
         return Results(cursor).fetchall_dict_factory()
+
+    def diary_for_date(self, diary_date):
+        cursor = self.query_with_params('''select *
+                                           from diary
+                                           where diary_date=?''',
+                                           (diary_date, ))
+        return Results(cursor).fetchall_dict_factory()

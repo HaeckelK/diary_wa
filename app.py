@@ -128,3 +128,9 @@ def category_index():
 def category_summary(category):
     data = app.config['DATABASE'].diary_get_all_category(category)
     return render_template('category_summary.html', category=category.title(), data=data)
+
+
+@app.route('/diary/<diary_date>')
+def diary(diary_date):
+    data = app.config['DATABASE'].diary_for_date(diary_date)
+    return render_template('diary.html', diary_date=diary_date, data=data)
