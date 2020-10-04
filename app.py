@@ -5,6 +5,7 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify, f
 import requests
 
 from diarydatabase import DiaryDatabase
+import tasks as tasks_module # TODO sort this out
 import utils
 
 
@@ -104,3 +105,15 @@ def delete_rawdiary(rawdiary_id):
 @app.route('/api/')
 def api():
     return render_template('api_index.html')
+
+
+@app.route('/tasks/')
+def tasks():
+    return render_template('task_index.html')
+
+
+@app.route('/tasks/extract_rawdiary_entries/')
+def extract_rawdiary_entries():
+    tasks_module.extract_rawdiary_entries()
+    return redirect(url_for('index'))
+

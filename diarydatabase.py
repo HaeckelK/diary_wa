@@ -84,7 +84,15 @@ class DiaryDatabase(Database):
         return status
 
     def get_unextracted_rawdiary(self):
-        cursor = self.query('''SELECT id FROM rawdiary where is_extracted = 0''')
+        cursor = self.query('''SELECT id FROM rawdiary where is_extracted = 0 and is_draft = 0''')
         result = cursor.fetchall()
         ids = list([str(x[0]) for x in result])
         return ids
+
+    def set_is_extracted_rawdiary(self, id):
+        params = (1, id)
+        cursor = self.query_with_params('''
+                                        UPDATE rawdiary set is_extracted = ? where id = ?;
+                                        ''', params)
+        cursor.close()
+        return
