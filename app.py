@@ -102,6 +102,18 @@ def delete_rawdiary(rawdiary_id):
     return redirect(url_for('index'))
 
 
+@app.route('/api/diary/', methods=['GET'])
+def api_diary():
+    db = app.config['DATABASE']
+    return jsonify(db.diary_get_all())
+
+
+@app.route('/api/diary/<diary_date>', methods=['GET'])
+def get_diary(diary_date):
+    db = app.config['DATABASE']
+    return jsonify(db.diary_for_date(diary_date))
+
+
 @app.route('/api/')
 def api():
     return render_template('api_index.html')
