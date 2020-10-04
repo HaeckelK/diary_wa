@@ -1,6 +1,6 @@
 """
 """
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from database import Database, Results
 
@@ -96,3 +96,23 @@ class DiaryDatabase(Database):
                                         ''', params)
         cursor.close()
         return
+
+    def diary_get_categories(self) -> List[str]:
+        cursor = self.query('''SELECT DISTINCT category FROM diary''')
+        result = cursor.fetchall()
+        categories = list([str(x[0]) for x in result])
+        return categories
+
+    def diary_get_all(self):
+        cursor = self.query('''select *
+                               from diary
+                               order by diary_date DESC''')
+        return Results(cursor).fetchall_dict_factory()
+
+    def diary_get_all_category(self, category):
+        cursor = self.query_with_params('''select *
+                                           from diary
+                                           where category=?
+                                           order by diary_date DESC''',
+                                           (category, ))
+        return Results(cursor).fetchall_dict_factory()

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{category}} summary{% endblock %}
+
+{% block content %}
+<h1><a href='/categories/'>{{category}}:</a></h1>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">{{category}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data%}
+      <tr>
+        <th scope="row">{{row['diary_date']}}</th>
+        <td>{{row['clean']}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

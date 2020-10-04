@@ -45,6 +45,8 @@ def test_diary(tmpdir):
     db.initial_setup()
 
     db.insert_diary(20201003, 'journal', 'abc', 'abc', 0)
-    assert Results(db.query('''SELECT * FROM diary''')).fetchall_dict_factory() == [{'id': 1, 'diary_date': 20201003, 'category': 'journal', 'original': 'abc', 'clean': 'abc', 'is_clean': 0}]
-
+    assert db.diary_get_all() == [{'id': 1, 'diary_date': 20201003, 'category': 'journal', 'original': 'abc', 'clean': 'abc', 'is_clean': 0}]
+    db.insert_diary(20201003, 'film', 'def', 'def', 0)
+    assert db.diary_get_categories() == ['journal', 'film']
+    assert db.diary_get_all_category('film') == [{'id': 2, 'diary_date': 20201003, 'category': 'film', 'original': 'def', 'clean': 'def', 'is_clean': 0}]
     

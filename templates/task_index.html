@@ -3,7 +3,7 @@
 
 {% block content %}
 NB: Temporary page for launching tasks that will be scheduled / run via worker.
-<h1>Tasks: </h1>
+<h1><a href="{{ url_for('index') }}">Tasks:</a></h1>
 <div class="container">
   <h2>Extract rawdiary</h2>
   <h3>endpoint</h3><a href="/tasks/extract_rawdiary_entries/">extract_rawdiary_entries</a>

@@ -117,3 +117,14 @@ def extract_rawdiary_entries():
     tasks_module.extract_rawdiary_entries()
     return redirect(url_for('index'))
 
+
+@app.route('/categories/')
+def category_index():
+    categories = app.config['DATABASE'].diary_get_categories()
+    return render_template('category_index.html', categories=categories)
+
+
+@app.route('/category/<category>')
+def category_summary(category):
+    data = app.config['DATABASE'].diary_get_all_category(category)
+    return render_template('category_summary.html', category=category.title(), data=data)
