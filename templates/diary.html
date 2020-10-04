@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}diary {{diary_date}}{% endblock %}
+
+{% block content %}
+<h1><a href="{{ url_for('index') }}">{{diary_date}}:</a></h1>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Category</th>
+        <th scope="col">Entry</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data%}
+      <tr>
+        <th scope="row"><a href="/category/{{row['category']}}">{{row['category']}}</a></th>
+        <td>{{row['clean']}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

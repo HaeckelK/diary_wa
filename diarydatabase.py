@@ -1,6 +1,6 @@
 """
 """
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from database import Database, Results
 
@@ -10,11 +10,23 @@ class DiaryDatabase(Database):
                 (id INTEGER PRIMARY KEY,
                 rawtext TEXT,
                 is_draft INT,
-                is_extracted INT);'''
+                is_extracted INT);
+                CREATE TABLE IF NOT EXISTS diary
+                (id INTEGER PRIMARY KEY,
+                diary_date INT,
+                category TEXT,
+                original TEXT,
+                clean TEXT,
+                is_clean INT);'''
 
     def insert_rawdiary(self, id: int, rawtext: str, is_draft: int, is_extracted: int):
         params = (id, rawtext, is_draft, is_extracted)
         new_id = self.insert('''INSERT INTO rawdiary(id, rawtext, is_draft, is_extracted) VALUES(?,?,?,?)''', params)
+        return new_id
+
+    def insert_diary(self, diary_date: int, category: str, original: str, clean: str, is_clean: int):
+        params = (diary_date, category, original, clean, is_clean)
+        new_id = self.insert('''INSERT INTO diary(diary_date, category, original, clean, is_clean) VALUES(?,?,?,?,?)''', params)
         return new_id
 
     def update_rawdiary(self, id: int, rawtext: str, is_draft: int, is_extracted: int):
@@ -52,7 +64,6 @@ class DiaryDatabase(Database):
         dates = list([str(x[0]) for x in result])
         return dates
 
-
     def get_all_rawdiary(self):
         cursor = self.query('''select *
                                from rawdiary''')
@@ -71,3 +82,44 @@ class DiaryDatabase(Database):
         result = cursor.fetchone()
         status = int(result[0])
         return status
+
+    def get_unextracted_rawdiary(self):
+        cursor = self.query('''SELECT id FROM rawdiary where is_extracted = 0 and is_draft = 0''')
+        result = cursor.fetchall()
+        ids = list([str(x[0]) for x in result])
+        return ids
+
+    def set_is_extracted_rawdiary(self, id):
+        params = (1, id)
+        cursor = self.query_with_params('''
+                                        UPDATE rawdiary set is_extracted = ? where id = ?;
+                                        ''', params)
+        cursor.close()
+        return
+
+    def diary_get_categories(self) -> List[str]:
+        cursor = self.query('''SELECT DISTINCT category FROM diary''')
+        result = cursor.fetchall()
+        categories = list([str(x[0]) for x in result])
+        return categories
+
+    def diary_get_all(self):
+        cursor = self.query('''select *
+                               from diary
+                               order by diary_date DESC''')
+        return Results(cursor).fetchall_dict_factory()
+
+    def diary_get_all_category(self, category):
+        cursor = self.query_with_params('''select *
+                                           from diary
+                                           where category=?
+                                           order by diary_date DESC''',
+                                           (category, ))
+        return Results(cursor).fetchall_dict_factory()
+
+    def diary_for_date(self, diary_date):
+        cursor = self.query_with_params('''select *
+                                           from diary
+                                           where diary_date=?''',
+                                           (diary_date, ))
+        return Results(cursor).fetchall_dict_factory()

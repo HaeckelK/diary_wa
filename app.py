@@ -5,6 +5,7 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify, f
 import requests
 
 from diarydatabase import DiaryDatabase
+import tasks as tasks_module # TODO sort this out
 import utils
 
 
@@ -101,6 +102,47 @@ def delete_rawdiary(rawdiary_id):
     return redirect(url_for('index'))
 
 
+@app.route('/api/diary/', methods=['GET'])
+def api_diary():
+    db = app.config['DATABASE']
+    return jsonify(db.diary_get_all())
+
+
+@app.route('/api/diary/<diary_date>', methods=['GET'])
+def get_diary(diary_date):
+    db = app.config['DATABASE']
+    return jsonify(db.diary_for_date(diary_date))
+
+
 @app.route('/api/')
 def api():
     return render_template('api_index.html')
+
+
+@app.route('/tasks/')
+def tasks():
+    return render_template('task_index.html')
+
+
+@app.route('/tasks/extract_rawdiary_entries/')
+def extract_rawdiary_entries():
+    tasks_module.extract_rawdiary_entries()
+    return redirect(url_for('index'))
+
+
+@app.route('/categories/')
+def category_index():
+    categories = app.config['DATABASE'].diary_get_categories()
+    return render_template('category_index.html', categories=categories)
+
+
+@app.route('/category/<category>')
+def category_summary(category):
+    data = app.config['DATABASE'].diary_get_all_category(category)
+    return render_template('category_summary.html', category=category.title(), data=data)
+
+
+@app.route('/diary/<diary_date>')
+def diary(diary_date):
+    data = app.config['DATABASE'].diary_for_date(diary_date)
+    return render_template('diary.html', diary_date=diary_date, data=data)
