@@ -57,7 +57,8 @@ def form_diary_entry(date):
     try:
         diary_text = row[0]['rawtext']
     except (KeyError, IndexError):
-        items = ('$breakfast', '$lunch', '$dinner', '$exercise', '$film', '$tv', '$game', '$journal')
+        with open('data\\categories.txt') as f:
+            items = tuple(['$' + x for x in f.read().splitlines()])
         diary_text = ';\n'.join(items) + ';\n' 
     return render_template('form_diary_entry.html', text=diary_text, date=date)
 
