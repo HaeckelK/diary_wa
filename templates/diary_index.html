@@ -3,7 +3,6 @@
 
 {% block content %}
 <h1>Diary Entry: </h1>
-<div class="container">
   <ul class="list-group">
     {% for day, status in dates %}
       {% if status == 'draft' %}
@@ -16,5 +15,4 @@
       <li class="list-group-item {{highlight}}"><a href='/forms/diary_entry/{{day}}'>{{day}}</a></li>
     {% endfor%}
   </ul>
-</div>
 {% endblock %}

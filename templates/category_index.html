@@ -2,10 +2,8 @@
 {% block title %}category index{% endblock %}
 
 {% block content %}
-<h1><a href="{{ url_for('index') }}">Categories:</a></h1>
-<div class="container">
+<h1>Categories:</h1>
   {% for category in categories %}
   <h2><a href="/category/{{category}}">{{category}}</a></h2>
   {% endfor %}
-</div>
 {% endblock %}
