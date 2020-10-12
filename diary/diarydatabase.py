@@ -123,3 +123,77 @@ class DiaryDatabase(Database):
                                            where diary_date=?''',
                                            (diary_date, ))
         return Results(cursor).fetchall_dict_factory()
+
+
+class BookNotesDatabase(Database):
+    schema = '''CREATE TABLE IF NOT EXISTS book
+                (id INTEGER PRIMARY KEY,
+                title TEXT,
+                isbn TEXT);
+                CREATE TABLE IF NOT EXISTS chapternotes
+                (id INTEGER PRIMARY KEY,
+                book_id INT,
+                chapter INT,
+                chapter_title TEXT,
+                notes TEXT);'''
+
+    def insert_book(self, title: str, isbn: str=None):
+        params = (title, isbn)
+        new_id = self.insert('''INSERT INTO book(title, isbn) VALUES(?,?)''', params)
+        return new_id
+
+    def insert_chapternotes(self, book_id: int, chapter: int, chapter_title: str, notes: str):
+        params = (book_id, chapter, chapter_title, notes)
+        new_id = self.insert('''INSERT INTO chapternotes(book_id, chapter, chapter_title, notes) VALUES(?,?,?,?)''', params)
+        return new_id
+
+    def book_get_all(self):
+        cursor = self.query('''select *
+                               from book''')
+        return Results(cursor).fetchall_dict_factory()
+
+    def get_book(self, id: int):
+        cursor = self.query_with_params('''select *
+                                           from book
+                                           where id=?''', (id, ))
+        return Results(cursor).fetchall_dict_factory()[0]
+
+    def chapternotes_get_all(self):
+        cursor = self.query('''select *
+                               from chapternotes''')
+        return Results(cursor).fetchall_dict_factory()
+
+    def book_get_chapternotes(self, id: int):
+        cursor = self.query_with_params('''select *
+                                           from chapternotes
+                                           where book_id=?''', (id, ))
+        return Results(cursor).fetchall_dict_factory()
+
+    def get_chapter(self, id: int):
+        cursor = self.query_with_params('''select *
+                                           from chapternotes
+                                           where id=?''', (id, ))
+        return Results(cursor).fetchall_dict_factory()[0]
+
+    def update_chapternotes(self, id: int, book_id: int, chapter: int, chapter_title: str, notes: str):
+        params = (book_id, chapter, chapter_title, notes, id)
+        cursor = self.query_with_params('''
+                                        UPDATE chapternotes set book_id = ?, chapter = ?, chapter_title = ?, notes = ? where id = ?;
+                                        ''', params)
+        cursor.close()
+        return
+
+    def upsert_chapternotes(self, id: int, book_id: int, chapter: int, chapter_title: str, notes: str):
+        cursor = self.query_with_params('''
+                                        select id
+                                        from chapternotes
+                                        where id = ?;
+                                        ''', (id, ))
+        args = (id, book_id, chapter, chapter_title, notes)
+        if cursor.fetchone():
+            self.update_chapternotes(*args)
+            pass
+        else:
+            self.insert_chapternotes(*args)
+        cursor.close()
+        return

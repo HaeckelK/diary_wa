@@ -21,7 +21,10 @@ def load_config():
 
 
 app = Flask(__name__)
+from diary.booknotes import bp as booknotes_bp
+app.register_blueprint(booknotes_bp)
 app.config.update(load_config())
+
 
 
 @app.route('/')

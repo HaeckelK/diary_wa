@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{book['title']}}{% endblock %}
+
+{% block content %}
+<h1>{{book['title'].title()}}</h1>
+<h2>{{chapter['chapter_title'].title()}}</h2>
+<form action="#" method="get">
+    <input type="hidden" id="id" name="id" value="{{chapter['id']}}">
+    <div class="form-group">
+      <textarea class="form-control" name="notes" cols="25" rows="10">{{chapter['notes']}}</textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

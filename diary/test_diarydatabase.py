@@ -1,14 +1,7 @@
 import pytest
 import os
 
-from diarydatabase import DiaryDatabase, Results
-
-
-@pytest.fixture()
-def empty_database():
-    db = DiaryDatabase(':memory:')
-    db.initial_setup()
-    return db
+from diarydatabase import DiaryDatabase, Results, BookNotesDatabase
 
 
 def test_rawdiary(tmpdir):
@@ -50,4 +43,28 @@ def test_diary(tmpdir):
     assert db.diary_get_categories() == ['journal', 'film']
     assert db.diary_get_all_category('film') == [{'id': 2, 'diary_date': 20201002, 'category': 'film', 'original': 'def', 'clean': 'def', 'is_clean': 0}]
     assert db.diary_for_date(20201003) == [{'id': 1, 'diary_date': 20201003, 'category': 'journal', 'original': 'abc', 'clean': 'abc', 'is_clean': 0}]
-    
+
+
+def test_book(tmpdir):
+    filename = os.path.join(tmpdir, 'test.db')
+    db = BookNotesDatabase(filename)
+    db.initial_setup()
+
+    db.insert_book('abc')
+    db.insert_book('def', '123')
+    assert db.book_get_all() == [{'id': 1, 'title': 'abc', 'isbn': None},
+                                 {'id': 2, 'title': 'def', 'isbn': '123'}]
+    assert db.get_book(2) == {'id': 2, 'title': 'def', 'isbn': '123'}
+
+
+def test_chapternotes(tmpdir):
+    filename = os.path.join(tmpdir, 'test.db')
+    db = BookNotesDatabase(filename)
+    db.initial_setup()
+
+    db.insert_chapternotes(999, 27, 'begin', 'not my cup of tea')
+    assert db.chapternotes_get_all() == [{'id': 1, 'book_id': 999, 'chapter': 27, 'chapter_title': 'begin', 'notes': 'not my cup of tea'}]
+    db.insert_chapternotes(100, 10, 'end', 'still not my cup of tea')
+    db.upsert_chapternotes(1, 999, 27, 'begin', 'nope')
+    assert db.get_chapter(1) == {'id': 1, 'book_id': 999, 'chapter': 27, 'chapter_title': 'begin', 'notes': 'nope'}
+    assert db.book_get_chapternotes(999) == [{'id': 1, 'book_id': 999, 'chapter': 27, 'chapter_title': 'begin', 'notes': 'nope'}]
