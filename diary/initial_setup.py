@@ -1,7 +1,7 @@
 import configparser
 import sys
 
-from diarydatabase import DiaryDatabase
+from diary.diarydatabase import DiaryDatabase
 
 
 def main():
