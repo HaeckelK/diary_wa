@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Booknotes Index{% endblock %}
+
+{% block content %}
+<a href="{{url_for('booknotes.form_add_book')}}">Add New Book</a>
+<h1>Booknotes</h1>
+{% for book in books %}
+<h2><a href="{{url_for('booknotes.booknotes_page', id=book['id'])}}">{{book['title']}}</a></h2>
+{% endfor %}
+{% endblock %}

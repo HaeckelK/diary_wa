@@ -21,6 +21,33 @@
   {% endif %}
   {% endwith %}
 </head>
+{% set suspension_count = session.get("suspension_count", 0) %}
+{% set current_position = session.get("current_position", 0) %}
+{% set userid = session.get("user_id", None) %}
+{% set badge = session.get("badge", None) %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="\">Diary {{config['PLATFORM']}}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="\categories">Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="\booknotes_index">Booknotes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="\tasks">Tasks</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="\api">API</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 <div class="container">{% block content %}{% endblock %}</div>
 <div id="footer">
   {% block footer %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{book['title']}}{% endblock %}
+
+{% block content %}
+<h1>{{book['title']}}</h1>
+{% for chapter in chapters %}
+<h2><a href="{{url_for('booknotes.chapter_page', id=chapter['id'])}}">{{chapter['chapter']}} {{chapter['chapter_title']}}</a></h2>
+{% endfor %}
+<h2>Add Chapter</h2>
+<form action="#" method="get">
+    <div class="form-group">
+        <label for="chapter">Chapter</label>
+        <input type="number" class="form-control" id="chapter" name="chapter">
+    </div>
+
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

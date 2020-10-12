@@ -1,4 +1,4 @@
-# diary_wa 0.4.1
+# diary_wa 0.5.0
 
 ## Introduction
 Small scale Flask web app to write diary through form and write to database.
