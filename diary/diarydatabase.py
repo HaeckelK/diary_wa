@@ -2,7 +2,7 @@
 """
 from typing import Optional, Dict, List
 
-from database import Database, Results
+from diary.database import Database, Results
 
 
 class DiaryDatabase(Database):

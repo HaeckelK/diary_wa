@@ -6,7 +6,7 @@ For example db to db actions.
 import logging
 import configparser
 
-from diarydatabase import DiaryDatabase, Results
+from diary.diarydatabase import DiaryDatabase, Results
 
 logger = logging.getLogger(__name__)
 

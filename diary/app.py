@@ -5,9 +5,9 @@ import configparser
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
 import requests
 
-from diarydatabase import DiaryDatabase
-import tasks as tasks_module # TODO sort this out
-import utils
+from diary.diarydatabase import DiaryDatabase
+import diary.tasks as tasks_module # TODO sort this out
+import diary.utils
 
 
 def load_config():
