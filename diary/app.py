@@ -7,7 +7,7 @@ import requests
 
 from diary.diarydatabase import DiaryDatabase
 import diary.tasks as tasks_module # TODO sort this out
-import diary.utils
+import diary.utils as utils
 
 
 def load_config():
