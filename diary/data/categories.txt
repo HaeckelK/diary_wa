@@ -1,8 +1,0 @@
-breakfast
-lunch
-dinner
-exercise
-film
-tv
-game
-journal
