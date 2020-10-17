@@ -23,6 +23,8 @@ def load_config():
 app = Flask(__name__)
 from diary.booknotes import bp as booknotes_bp
 app.register_blueprint(booknotes_bp)
+from diary.articles import bp as articles_bp
+app.register_blueprint(articles_bp)
 app.config.update(load_config())
 
 

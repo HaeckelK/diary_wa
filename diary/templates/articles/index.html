@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Articles Index{% endblock %}
+
+{% block content %}
+<h1>Add Article</h1>
+<form action="" method="get">
+    <div class="form-group">
+        <label for="url">Url:</label>
+        <input type="text" class="form-control" id="url" name="url">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<h1>Articles</h1>
+{% for article in articles %}
+<a href="{{article['url']}}">{{article['url']}}</a><br>
+{% endfor %}
+{% endblock %}
