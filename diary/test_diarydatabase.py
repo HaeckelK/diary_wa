@@ -1,7 +1,7 @@
 import pytest
 import os
 
-from diarydatabase import DiaryDatabase, Results, BookNotesDatabase
+from diarydatabase import DiaryDatabase, Results, BookNotesDatabase, ArticleDatabase
 
 
 def test_rawdiary(tmpdir):
@@ -68,3 +68,12 @@ def test_chapternotes(tmpdir):
     db.upsert_chapternotes(1, 999, 27, 'begin', 'nope')
     assert db.get_chapter(1) == {'id': 1, 'book_id': 999, 'chapter': 27, 'chapter_title': 'begin', 'notes': 'nope'}
     assert db.book_get_chapternotes(999) == [{'id': 1, 'book_id': 999, 'chapter': 27, 'chapter_title': 'begin', 'notes': 'nope'}]
+
+
+def test_article(tmpdir):
+    filename = os.path.join(tmpdir, 'test.db')
+    db = ArticleDatabase(filename)
+    db.initial_setup()
+
+    db.insert_article('www.fake.com', 20201017)
+    assert db.get_all_article() == [{'id': 1, 'url': 'www.fake.com', 'date_added': 20201017}]
