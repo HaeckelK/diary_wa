@@ -7,7 +7,21 @@ Searched for words and status 200 urls are saved in sqlite database (path specif
 
 ## Initial Setup
 - Copy config_template.ini to config.ini and add database path included .db extension.
+```bash
+cp diary/config_template.ini diary/config.ini
+```
+- setup venv
+```bash
+python -m venv venv
+source venv/scripts/activate
+pip install -r diary/requirements.txt
+pip install -r diary/requirements_dev.txt
+```
 - run python3 initial_setup.py
+```bash
+python -c "from diary import initial_setup; initial_setup.main();"
+```
+
 - set PORT in launch.sh
 
 ## Production
@@ -22,6 +36,7 @@ bash launch.sh
 ```bash
 export FLASK_APP=app.py
 export FLASK_ENV=development
+cd diary
 flask run --port=5008
 # or
 flask run --port=5008 --host=0.0.0.0
@@ -30,6 +45,7 @@ Windows
 ```bash
 set FLASK_APP=app.py
 set FLASK_ENV=development
+cd diary
 flask run --port=5008
 # or
 flask run --port=5008 --host=0.0.0.0
