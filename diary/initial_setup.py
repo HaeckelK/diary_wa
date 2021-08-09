@@ -1,20 +1,21 @@
 import configparser
 import sys
 
-from diary.diarydatabase import DiaryDatabase
+from diary.diarydatabase import DiaryDatabase, BookNotesDatabase, ArticleDatabase
 
 
 def main():
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('diary/config.ini')
     filename = config['DATABASE']['path']
     print('initial setup')
     print('creating database', filename)
     if filename == '':
         print('Database path must specifiy .db file')
         sys.exit()
-    db = DiaryDatabase(filename)
-    db.initial_setup()
+    for base in (DiaryDatabase, BookNotesDatabase, ArticleDatabase):
+        db = base(filename)
+        db.initial_setup()
     print('created', filename)
     return
 

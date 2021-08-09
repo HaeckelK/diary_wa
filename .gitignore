@@ -1,5 +1,6 @@
 __pycache__
 .venv
+/venv
 .env
 .vscode/
 .coverage
@@ -7,3 +8,4 @@ htmlcov/
 config.ini
 deploy.sh
 data/
+*.db
