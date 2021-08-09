@@ -197,20 +197,3 @@ class BookNotesDatabase(Database):
             self.insert_chapternotes(*args)
         cursor.close()
         return
-
-
-class ArticleDatabase(Database):
-    schema = '''CREATE TABLE IF NOT EXISTS article
-                (id INTEGER PRIMARY KEY,
-                url TEXT,
-                date_added INT);'''
-
-    def insert_article(self, url: str, date_added: int):
-        params = (url, date_added)
-        new_id = self.insert('''INSERT INTO article(url, date_added) VALUES(?,?)''', params)
-        return new_id
-
-    def get_all_article(self):
-        cursor = self.query('''select *
-                               from article''')
-        return Results(cursor).fetchall_dict_factory()

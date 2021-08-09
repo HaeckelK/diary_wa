@@ -36,6 +36,7 @@ bash launch.sh
 ```bash
 export FLASK_APP=app.py
 export FLASK_ENV=development
+export ARTICLES_API_URL=http://192.168.99.100:5125
 cd diary
 flask run --port=5008
 # or
@@ -45,6 +46,7 @@ Windows
 ```bash
 set FLASK_APP=app.py
 set FLASK_ENV=development
+set ARTICLES_API_URL=http://192.168.99.100:5125
 cd diary
 flask run --port=5008
 # or

@@ -1,7 +1,7 @@
 import configparser
 import sys
 
-from diary.diarydatabase import DiaryDatabase, BookNotesDatabase, ArticleDatabase
+from diary.diarydatabase import DiaryDatabase, BookNotesDatabase
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     if filename == '':
         print('Database path must specifiy .db file')
         sys.exit()
-    for base in (DiaryDatabase, BookNotesDatabase, ArticleDatabase):
+    for base in (DiaryDatabase, BookNotesDatabase):
         db = base(filename)
         db.initial_setup()
     print('created', filename)
