@@ -10,6 +10,10 @@ Searched for words and status 200 urls are saved in sqlite database (path specif
 ```bash
 cp diary/config_template.ini diary/config.ini
 ```
+- Create empty categories file:
+```bash
+touch data/categories.txt
+```
 - setup venv
 ```bash
 python -m venv venv

@@ -63,7 +63,7 @@ def form_diary_entry(date):
     try:
         diary_text = row[0]['rawtext']
     except (KeyError, IndexError):
-        with open(os.path.join('data', 'categories.txt')) as f:
+        with open("/data/categories.txt") as f:
             items = tuple(['$' + x for x in f.read().splitlines()])
         diary_text = ';\n'.join(items) + ';\n' 
     return render_template('form_diary_entry.html', text=diary_text, date=date)

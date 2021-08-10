@@ -4,6 +4,19 @@ volumes:
   postgres_data:
 
 services:
+  web:
+    build:
+      context: ./services/diary
+    volumes:
+      - ./services/diary:/diary/
+      - ./data:/data/
+    environment:
+      - FLASK_ENV=development
+      - SQLITE_DB_PATH=$SQLITE_DB_PATH
+      - ARTICLES_API_URL=http://articles-api:5000
+    ports:
+      - 5125:5000
+    restart: always
   articles-api:
     build:
       context: ./services/articles
@@ -14,5 +27,5 @@ services:
       - FLASK_ENV=development
       - SQLITE_DB_PATH=$SQLITE_DB_PATH
     ports:
-      - 5125:5000
+      - 5126:5000
     restart: always
