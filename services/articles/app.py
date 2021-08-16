@@ -3,14 +3,22 @@ from datetime import datetime
 import os
 
 from flask import Flask, request
+from flask_sqlalchemy import SQLAlchemy
 
-from database import ArticleDatabase
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["ARTICLES_DATABASE_URI"]
+db = SQLAlchemy(app)
 
 
-def get_db():
-    return ArticleDatabase(os.environ["SQLITE_DB_PATH"])
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.Text, unique=True, nullable=False)
+    date_added = db.Column(db.Integer, unique=False, nullable=False)
+
+
+def serialize_article(article: Article):
+    return {"id": article.id, "url": article.url, "date_added": article.date_added}
 
 
 @app.route("/")
@@ -20,26 +28,29 @@ def index():
 
 @app.route("/articles", methods=["GET"])
 def get_articles():
-    db = get_db()
-    articles = db.get_all_article()
-    return articles
+    articles = Article.query.all()
+    return {x.id: serialize_article(x) for x in articles}
 
 
 @app.route("/articles/<int:id>", methods=["GET"])
 def get_article(id: int):
-    db = get_db()
-    articles = db.get_all_article()
-    return asdict(articles[id])
+    articles = Article.query.all()
+    data = {x.id: serialize_article(x) for x in articles}
+    return data[id]
 
 
 @app.route("/articles", methods=["POST"])
 def post_article():
     url = request.form.get("url")
 
-    db = get_db()
-    id = db.insert_article(url=url, date_added=today())
-    articles = db.get_all_article()
-    return asdict(articles[id])
+    article = Article(url=url, date_added=int(today()))
+    db.session.add(article)
+    db.session.commit()
+    id = article.id
+
+    articles = Article.query.all()
+    data = {x.id: serialize_article(x) for x in articles}
+    return data[id]
 
 
 def today(date_format: str = "%Y%m%d") -> str:
