@@ -3,6 +3,7 @@ import json
 
 from flask import render_template, url_for, request, flash, redirect
 import requests
+from requests.exceptions import ConnectionError
 
 from diary.articles import bp
 
@@ -11,8 +12,13 @@ from diary.articles import bp
 def articles_index():
     api_url = os.environ["ARTICLES_API_URL"]
     # Obtain from API
-    response = requests.get(api_url + "/articles")
-    articles = json.loads(response.content).values()
+    try:
+        response = requests.get(api_url + "/articles")
+    except ConnectionError:
+        articles = []
+        flash("articles cannot be displayed as articles service is not available at the moment")
+    else:
+        articles = json.loads(response.content).values()
 
     # Adding an article
     if request.args:
@@ -22,8 +28,12 @@ def articles_index():
             return render_template('articles/index.html', articles=articles)
 
         # Add through API
-        post_response = requests.post(api_url + "/articles",
-                                      data={"url": url})
-        flash('Added article')
+        try:
+            post_response = requests.post(api_url + "/articles",
+                                        data={"url": url})
+        except ConnectionError:
+            flash("article could not be added as articles service is not available at the moment")
+        else:
+            flash(f'Added article: {url}')
         return redirect(url_for('articles.articles_index'))
     return render_template('articles/index.html', articles=articles)
