@@ -25,7 +25,7 @@ services:
       - ./data:/data/
     environment:
       - FLASK_ENV=development
-      - SQLITE_DB_PATH=$SQLITE_DB_PATH
+      - ARTICLES_DATABASE_URI=$ARTICLES_DATABASE_URI
     ports:
       - 5126:5000
     restart: always
