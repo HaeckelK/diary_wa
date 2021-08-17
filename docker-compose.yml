@@ -15,6 +15,7 @@ services:
       - SQLITE_DB_PATH=$SQLITE_DB_PATH
       - ARTICLES_API_URL=http://articles-api:5000
       - MAIN_DATABASE_URI=$MAIN_DATABASE_URI
+      - SECRET_KEY=$SECRET_KEY
     ports:
       - 5125:5000
     restart: always
