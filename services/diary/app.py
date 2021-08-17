@@ -1,6 +1,7 @@
 from typing import Dict
 import os
 import configparser
+from datetime import datetime
 
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
 
@@ -56,7 +57,8 @@ def create_app():
                     status = 'draft'
                 else:
                     status = 'completed'
-            dates.append((day, status))
+            display = datetime.strptime(day, '%Y%m%d').strftime('%A %d %B %Y')
+            dates.append((display, day, status))
 
         return render_template('diary_index.html', dates=dates)
 
@@ -69,8 +71,9 @@ def create_app():
             diary_text = row[0]['rawtext']
         except (KeyError, IndexError):
             items = tuple(['$' + x for x in [c.name for c in DefaultCategory.query.all()]])
-            diary_text = ';\n'.join(items) + ';\n' 
-        return render_template('form_diary_entry.html', text=diary_text, date=date)
+            diary_text = ';\n'.join(items) + ';\n'
+        display = datetime.strptime(date, '%Y%m%d').strftime('%A %d %B %Y')
+        return render_template('form_diary_entry.html', text=diary_text, date=display)
 
 
     @app.route('/api/rawdiary/', methods=['GET'])

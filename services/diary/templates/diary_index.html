@@ -4,7 +4,7 @@
 {% block content %}
 <h1>Diary Entry: </h1>
   <ul class="list-group">
-    {% for day, status in dates %}
+    {% for display, day, status in dates %}
       {% if status == 'draft' %}
         {% set highlight = 'list-group-item-warning' %}
       {% elif status == 'completed' %}
@@ -12,7 +12,7 @@
       {% else %}
         {% set highlight = 'list-group-item-light' %}
       {% endif %}
-      <li class="list-group-item {{highlight}}"><a href='/forms/diary_entry/{{day}}'>{{day}}</a></li>
+      <li class="list-group-item {{highlight}}"><a href='/forms/diary_entry/{{day}}'>{{display}}</a></li>
     {% endfor%}
   </ul>
 {% endblock %}
