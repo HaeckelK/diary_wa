@@ -3,7 +3,7 @@ import os
 import configparser
 
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
-import requests
+from flask_sqlalchemy import SQLAlchemy
 
 from diary.diarydatabase import DiaryDatabase
 import diary.tasks as tasks_module # TODO sort this out
@@ -21,12 +21,18 @@ def load_config():
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["MAIN_DATABASE_URI"]
+db = SQLAlchemy(app)
 from diary.booknotes import bp as booknotes_bp
 app.register_blueprint(booknotes_bp)
 from diary.articles import bp as articles_bp
 app.register_blueprint(articles_bp)
 app.config.update(load_config())
 
+
+class DefaultCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, unique=True, nullable=False)
 
 
 @app.route('/')
@@ -63,8 +69,7 @@ def form_diary_entry(date):
     try:
         diary_text = row[0]['rawtext']
     except (KeyError, IndexError):
-        with open("/data/categories.txt") as f:
-            items = tuple(['$' + x for x in f.read().splitlines()])
+        items = tuple(['$' + x for x in [c.name for c in DefaultCategory.query.all()]])
         diary_text = ';\n'.join(items) + ';\n' 
     return render_template('form_diary_entry.html', text=diary_text, date=date)
 
@@ -153,3 +158,10 @@ def category_summary(category):
 def diary(diary_date):
     data = app.config['DATABASE'].diary_for_date(diary_date)
     return render_template('diary.html', diary_date=diary_date, data=data)
+
+
+@app.route("/create_db")
+def create_db():
+    # TODO this is here because at present db can't be imported into python shell
+    db.create_all()
+    return "db created"
