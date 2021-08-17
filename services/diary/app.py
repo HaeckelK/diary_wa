@@ -15,7 +15,7 @@ def load_config():
     filename = config['DATABASE']['path']
     config = {'DBFILENAME': filename,
               'DATABASE':  DiaryDatabase(filename),
-              'SECRET_KEY': 'ndgnfdksmdfpa'}
+              'SECRET_KEY': os.environ["SECRET_KEY"]}
     return config
 
 
