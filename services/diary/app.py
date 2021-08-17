@@ -22,6 +22,7 @@ def load_config():
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["MAIN_DATABASE_URI"]
+    app.config["ARTICLES_API_URL"] = os.environ["ARTICLES_API_URL"]
 
     from diary.model import db, DefaultCategory
     db.init_app(app)
