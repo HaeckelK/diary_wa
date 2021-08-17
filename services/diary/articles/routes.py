@@ -1,7 +1,7 @@
 import os
 import json
 
-from flask import render_template, url_for, request, flash, redirect
+from flask import render_template, url_for, request, flash, redirect, current_app
 import requests
 from requests.exceptions import ConnectionError
 
@@ -10,7 +10,7 @@ from diary.articles import bp
 
 @bp.route('/articles_index')
 def articles_index():
-    api_url = os.environ["ARTICLES_API_URL"]
+    api_url = current_app.config["ARTICLES_API_URL"]
     # Obtain from API
     try:
         response = requests.get(api_url + "/articles")
