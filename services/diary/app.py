@@ -3,7 +3,6 @@ import os
 import configparser
 
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
-from flask_sqlalchemy import SQLAlchemy
 
 from diary.diarydatabase import DiaryDatabase
 import diary.tasks as tasks_module # TODO sort this out
@@ -24,7 +23,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["MAIN_DATABASE_URI"]
 
-    db = SQLAlchemy()
+    from diary.model import db, DefaultCategory
     db.init_app(app)
 
     from diary.booknotes import bp as booknotes_bp
@@ -32,10 +31,6 @@ def create_app():
     from diary.articles import bp as articles_bp
     app.register_blueprint(articles_bp)
     app.config.update(load_config())
-
-    class DefaultCategory(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        name = db.Column(db.Text, unique=True, nullable=False)
 
 
     @app.route('/')
