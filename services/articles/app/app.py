@@ -8,7 +8,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["ARTICLES_DATABASE_URI"]
 
-    from model import db, Article
+    from app.model import db, Article
 
     db.init_app(app)
 
@@ -28,7 +28,10 @@ def create_app():
     def get_article(id: int):
         articles = Article.query.all()
         data = {x.id: serialize_article(x) for x in articles}
-        return data[id]
+        try:
+            return data[id]
+        except KeyError:
+            return f"Record not found for id {id}", 400
 
     @app.route("/articles", methods=["POST"])
     def post_article():
