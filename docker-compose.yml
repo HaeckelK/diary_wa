@@ -23,7 +23,7 @@ services:
     build:
       context: ./services/articles
     volumes:
-      - ./services/articles:/app/
+      - ./services/articles:/articles/
       - ./data:/data/
     environment:
       - FLASK_ENV=development
