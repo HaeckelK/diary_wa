@@ -166,5 +166,13 @@ def create_app():
     def create_db():
         # TODO this is here because at present db can't be imported into python shell
         db.create_all()
+        db.session.add(DefaultCategory(name="lunch"))
+        db.session.add(DefaultCategory(name="dinner"))
+        db.session.add(DefaultCategory(name="game"))
+        db.session.add(DefaultCategory(name="film"))
+        db.session.add(DefaultCategory(name="tv"))
+        db.session.add(DefaultCategory(name="project"))
+        db.session.add(DefaultCategory(name="journal"))
+        db.session.commit()
         return "db created"
     return app
