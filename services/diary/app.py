@@ -73,7 +73,7 @@ def create_app():
             items = tuple(['$' + x for x in [c.name for c in DefaultCategory.query.all()]])
             diary_text = ';\n'.join(items) + ';\n'
         display = datetime.strptime(date, '%Y%m%d').strftime('%A %d %B %Y')
-        return render_template('form_diary_entry.html', text=diary_text, date=display)
+        return render_template('form_diary_entry.html', text=diary_text, display=display, date=date)
 
 
     @app.route('/api/rawdiary/', methods=['GET'])
