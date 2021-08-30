@@ -31,8 +31,13 @@ def create_app():
 
     from diary.booknotes import bp as booknotes_bp
     app.register_blueprint(booknotes_bp)
+
     from diary.articles import bp as articles_bp
     app.register_blueprint(articles_bp)
+
+    from diary.memories import bp as memories_bp
+    app.register_blueprint(memories_bp)
+
     app.config.update(load_config())
 
 
