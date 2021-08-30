@@ -16,6 +16,7 @@ services:
       - ARTICLES_API_URL=http://articles-api:5000
       - MAIN_DATABASE_URI=$MAIN_DATABASE_URI
       - SECRET_KEY=$SECRET_KEY
+      - BUILD_ENV=$BUILD_ENV
     ports:
       - 5125:5000
     restart: always
