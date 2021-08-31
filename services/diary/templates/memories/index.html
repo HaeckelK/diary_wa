@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Memories Index{% endblock %}
+
+{% block content %}
+<h1>Memories DEV</h1>
+<h2>Add New</h2>
+<form action="" method="post">
+    <div class="form-group">
+        <label for="content">Memory:</label>
+        <input type="text" class="form-control" id="content" name="content">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<h2>Recently Added</h2>
+{% for memory in recent_memories %}
+<p>{{ memory.text }}</p>
+{% endfor %}
+{% endblock %}

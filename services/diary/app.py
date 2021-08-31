@@ -24,6 +24,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["MAIN_DATABASE_URI"]
     app.config["ARTICLES_API_URL"] = os.environ["ARTICLES_API_URL"]
+    app.config["MEMORIES_API_URL"] = os.environ["MEMORIES_API_URL"]
     app.config["BUILD_ENV"] = os.environ["BUILD_ENV"]
 
     from diary.model import db, DefaultCategory
@@ -31,8 +32,13 @@ def create_app():
 
     from diary.booknotes import bp as booknotes_bp
     app.register_blueprint(booknotes_bp)
+
     from diary.articles import bp as articles_bp
     app.register_blueprint(articles_bp)
+
+    from diary.memories import bp as memories_bp
+    app.register_blueprint(memories_bp)
+
     app.config.update(load_config())
 
 

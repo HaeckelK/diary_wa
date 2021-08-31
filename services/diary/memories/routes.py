@@ -1,0 +1,39 @@
+from dataclasses import dataclass
+import json
+
+from flask import render_template, request, flash, redirect, current_app
+import requests
+from requests.exceptions import ConnectionError
+
+from diary.memories import bp
+
+@dataclass
+class Memory:
+    text: str
+
+
+@bp.route('/memories', methods=["GET", "POST"])
+def index():
+    api_url = current_app.config["MEMORIES_API_URL"]
+    try:
+        response = requests.get(api_url + "/memories")
+    except ConnectionError:
+        recent_memories = []
+        flash("No connection to memories API.")
+    else:
+        recent_memories = json.loads(response.content).values()
+
+    if request.method == "POST":
+        # TODO post to memories API
+        content = request.form["content"]
+        try:
+            post_response = requests.post(api_url + "/memories",
+                                          data={"text": content})
+        except ConnectionError:
+            flash("Memory not added")
+        else:
+            flash("Memory added")
+        return redirect("/memories")
+
+
+    return render_template("memories/index.html", recent_memories=recent_memories)
