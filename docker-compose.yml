@@ -14,6 +14,7 @@ services:
       - FLASK_ENV=development
       - SQLITE_DB_PATH=$SQLITE_DB_PATH
       - ARTICLES_API_URL=http://articles-api:5000
+      - MEMORIES_API_URL=http://memories-api:5000
       - MAIN_DATABASE_URI=$MAIN_DATABASE_URI
       - SECRET_KEY=$SECRET_KEY
       - BUILD_ENV=$BUILD_ENV
