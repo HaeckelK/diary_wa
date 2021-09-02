@@ -15,6 +15,8 @@ class Memory:
 @bp.route('/memories', methods=["GET", "POST"])
 def index():
     api_url = current_app.config["MEMORIES_API_URL"]
+
+    # TODO pass some limit to this request
     try:
         response = requests.get(api_url + "/memories")
     except ConnectionError:
@@ -28,11 +30,10 @@ def index():
         recent_memories.append(Memory(text=memory["content"]))
 
     if request.method == "POST":
-        # TODO post to memories API
         content = request.form["content"]
         try:
             post_response = requests.post(api_url + "/memories",
-                                          data={"text": content})
+                                          data={"content": content})
         except ConnectionError:
             flash("Memory not added")
         else:
