@@ -21,6 +21,8 @@ services:
     ports:
       - 5125:5000
     restart: always
+    networks:
+      - diary_diary
   articles-api:
     build:
       context: ./services/articles
@@ -33,3 +35,7 @@ services:
     ports:
       - 5126:5000
     restart: always
+
+networks:
+  diary_diary:
+    external: true
